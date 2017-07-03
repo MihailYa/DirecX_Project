@@ -6,8 +6,13 @@ int main()
 
 	MyRender *render = new MyRender();
 
-	framework.SetRender(render);
-	framework.Init();
+	
+	FrameworkDesc myDesk;
+	myDesk.render = render;
+	myDesk.wnd.height = 1000;
+	myDesk.wnd.width = 1400;
+
+	framework.Init(myDesk);
 
 	framework.Run();
 
