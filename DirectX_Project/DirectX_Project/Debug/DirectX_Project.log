@@ -1,4 +1,4 @@
-﻿  MyRender.cpp
+﻿  User.cpp
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\dxgitype.h(12): warning C4005: 'DXGI_STATUS_OCCLUDED': macro redefinition
   c:\program files (x86)\windows kits\8.1\include\shared\winerror.h(50092): note: see previous definition of 'DXGI_STATUS_OCCLUDED'
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\dxgitype.h(13): warning C4005: 'DXGI_STATUS_CLIPPED': macro redefinition
@@ -93,9 +93,9 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathconvert.
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathvector.inl(1269): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl(518): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl(519): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\myrender.cpp(180): warning C4316: 'User': object allocated on the heap may not be aligned 16
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\myrender.cpp(188): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\myrender.cpp(189): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\myrender.cpp(320): warning C4244: 'argument': conversion from 'double' to 'FLOAT', possible loss of data
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(9): warning C4244: 'argument': conversion from 'int' to 'FLOAT', possible loss of data
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(20): warning C4305: '=': truncation from 'double' to 'float'
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.exe
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.pdb (Full PDB)

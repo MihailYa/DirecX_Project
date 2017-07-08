@@ -7,7 +7,7 @@ using namespace D3D11Framework;
 class User : public InputListener
 {
 public:
-	User(XMMATRIX *matr, int x = 10, int y = 10, int z = 10);
+	User(XMMATRIX *matr, int x = 5, int y = 5, int z = 5);
 
 	static User* Get() { return m_this; }
 	XMVECTOR GetTarget() { return m_Target; }

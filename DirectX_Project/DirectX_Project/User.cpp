@@ -12,13 +12,14 @@ User::User(XMMATRIX *matr, int x, int y, int z)
 	m_coord_z = z;
 	m_x = 0;
 	m_y = 0;*/
-	m_Yaw = 0;
-	m_Pitch = 0;
+	m_Yaw = 225;
+	m_Pitch = 35;
 	m_User_View = matr;
 	m_this = this;
-
+	
 	m_speed = 0.4;
 
+	SetCursorPos(Window::Get()->GetWidth() / 2 + Window::Get()->GetLeft(), Window::Get()->GetHeight() / 2 + Window::Get()->GetTop());
 	this->Refresh();
 }
 
@@ -28,15 +29,15 @@ bool User::MouseMove(const MouseEvent &arg)
 	/*if (arg.x > 0 && arg.x < 50 && arg.y > 0 && arg.y < 50)
 		Log::Get()->Debug("Yes\n");*/
 	m_Yaw += (arg.x - Window::Get()->GetWidth() / 2)/4;
-	fmod(m_Yaw, 360);
+	m_Yaw = fmod(m_Yaw, 360);
 	m_Pitch += (arg.y - Window::Get()->GetHeight() / 2)/4;
-	fmod(m_Pitch, 360);
+	m_Pitch = fmod(m_Pitch, 360);
 	/*if (m_Pitch > 180)
 		m_Pitch = 180;
 	if (m_Pitch < 0)
 		m_Pitch = 0;*/
 
-	//Log::Get()->Debug("%d %d\n", m_x, m_y);
+	Log::Get()->Debug("%f %f\n", m_Yaw, m_Pitch);
 	SetCursorPos(Window::Get()->GetWidth() / 2 + Window::Get()->GetLeft(), Window::Get()->GetHeight() / 2 + Window::Get()->GetTop());
 	this->Refresh();
 
