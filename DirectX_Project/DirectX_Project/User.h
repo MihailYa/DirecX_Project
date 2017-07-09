@@ -1,6 +1,5 @@
 #include <math.h>
 #include <D3D11_Framework.h>
-#include <xnamath.h>
 
 using namespace D3D11Framework;
 
