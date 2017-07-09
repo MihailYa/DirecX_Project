@@ -1,5 +1,4 @@
-//#include "MyRender.h"
-#include "StaticMesh.h"
+#include "MyRender.h"
 #include "User.h"
 
 //struct SimpleVertex
@@ -187,10 +186,6 @@ bool MyRender::Init(HWND hwnd)
 	User *user = new User(&m_View);
 	Framework::Get()->AddInputListener(user);
 
-	float width = Window::Get()->GetWidth();
-	float height = Window::Get()->GetHeight();
-	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / height, 0.01f, 100.0f);
-
 	m_mesh = new StaticMesh();
 	if (!m_mesh->Init(this, L"mesh.ms3d"))
 		return false;
@@ -201,7 +196,20 @@ bool MyRender::Init(HWND hwnd)
 
 bool MyRender::Draw()
 {
-	m_mesh->Render();
+	static float rot = 0.0f;
+	rot += .0005f;
+	if (rot > 6.26f)
+		rot = 0.0f;
+
+	m_mesh->Identity();
+	m_mesh->Rotate(-rot, 0.0, 1.0, 0.0);
+	m_mesh->Translate(-1.5, 0.0, 0.0);
+	m_mesh->Draw(m_View);
+
+	m_mesh->Identity();
+	m_mesh->Rotate(rot, 0.0, 1.0, 0.0);
+	m_mesh->Translate(1.5, 0.0, 0.0);
+	m_mesh->Draw(m_View);
 	//Update();
 
 	//ConstantBuffer cb1;

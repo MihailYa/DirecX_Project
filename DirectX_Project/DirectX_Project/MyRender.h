@@ -4,8 +4,6 @@
 
 using namespace D3D11Framework;
 
-class StaticMesh;
-
 class MyRender : public Render
 {
 public:
@@ -27,10 +25,7 @@ public:
 	}
 
 private:
-	friend StaticMesh;
-
 	StaticMesh *m_mesh;
 
 	XMMATRIX m_View;
-	XMMATRIX m_Projection;
 };
