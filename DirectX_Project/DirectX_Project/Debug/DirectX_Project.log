@@ -95,7 +95,7 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl(519): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(9): warning C4244: 'argument': conversion from 'int' to 'FLOAT', possible loss of data
 c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(20): warning C4305: '=': truncation from 'double' to 'float'
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(32): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(34): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(33): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\user.cpp(35): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.exe
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.pdb (Full PDB)

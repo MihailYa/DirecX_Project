@@ -1,19 +1,21 @@
-#include "MyRender.h"
+//#include "MyRender.h"
+#include "StaticMesh.h"
+#include "User.h"
 
-struct SimpleVertex
-{
-	XMFLOAT3 Pos;
-	XMFLOAT2 Tex;
-};
-
-struct ConstantBuffer
-{
-	XMMATRIX WVP;
-};
+//struct SimpleVertex
+//{
+//	XMFLOAT3 Pos;
+//	XMFLOAT2 Tex;
+//};
+//
+//struct ConstantBuffer
+//{
+//	XMMATRIX WVP;
+//};
 
 MyRender::MyRender()
 {
-	m_pVertexShader = nullptr;
+	/*m_pVertexShader = nullptr;
 	m_pPixelShader = nullptr;
 	m_pVertexLayout = nullptr;
 	m_pVertexBuffer = nullptr;
@@ -21,13 +23,14 @@ MyRender::MyRender()
 	m_pIndexBuffer = nullptr;
 	m_pConstantBuffer = nullptr;
 	m_pTextureRV = nullptr;
-	m_pSamplerLinear = nullptr;
+	m_pSamplerLinear = nullptr;*/
+	m_mesh = nullptr;
 
 }
 
 bool MyRender::Init(HWND hwnd)
 {
-	HRESULT hr = S_OK;
+	/*HRESULT hr = S_OK;
 	ID3DBlob* pVSBlob = NULL;
 	hr = m_compileshaderfromfile(L"shader.fx", "VS", "vs_4_0", &pVSBlob);
 	if (FAILED(hr))
@@ -179,40 +182,46 @@ bool MyRender::Init(HWND hwnd)
 		return false;
 
 	m_World1 = XMMatrixIdentity();
-	m_World2 = XMMatrixIdentity();
+	m_World2 = XMMatrixIdentity();*/
 
 	User *user = new User(&m_View);
 	Framework::Get()->AddInputListener(user);
 
 	float width = Window::Get()->GetWidth();
 	float height = Window::Get()->GetHeight();
-	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, width / height, 0.01f, 100.0f);
+	m_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, width / height, 0.01f, 100.0f);
+
+	m_mesh = new StaticMesh();
+	if (!m_mesh->Init(this, L"mesh.ms3d"))
+		return false;
+
 
 	return true;
 }
 
 bool MyRender::Draw()
 {
-	Update();
+	m_mesh->Render();
+	//Update();
 
-	ConstantBuffer cb1;
-	cb1.WVP = XMMatrixTranspose(m_View*m_Projection);
+	//ConstantBuffer cb1;
+	//cb1.WVP = XMMatrixTranspose(m_View*m_Projection);
+
+	////m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
+	////m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	////m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	////m_pImmediateContext->DrawIndexed(36, 0, 0);
 
 	//m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
 	//m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
 	//m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
+	//m_pImmediateContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
+	//m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
+	//m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
+
+	//m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb1, 0, 0);
+
 	//m_pImmediateContext->DrawIndexed(36, 0, 0);
-
-	m_pImmediateContext->VSSetShader(m_pVertexShader, NULL, 0);
-	m_pImmediateContext->VSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-	m_pImmediateContext->PSSetShader(m_pPixelShader, NULL, 0);
-	m_pImmediateContext->PSSetConstantBuffers(0, 1, &m_pConstantBuffer);
-	m_pImmediateContext->PSSetShaderResources(0, 1, &m_pTextureRV);
-	m_pImmediateContext->PSSetSamplers(0, 1, &m_pSamplerLinear);
-
-	m_pImmediateContext->UpdateSubresource(m_pConstantBuffer, 0, NULL, &cb1, 0, 0);
-
-	m_pImmediateContext->DrawIndexed(36, 0, 0);
 	/*
 	// oY
 	cb1.WVP = XMMatrixTranspose(XMMatrixScaling(0.08f, 10.0f, 0.08f)*m_View*m_Projection);
@@ -244,24 +253,25 @@ void MyRender::Update()
 		dwTimeStart = dwTimeCur;
 	t = (dwTimeCur - dwTimeStart) / 1000.0f;
 
-	m_World1 = XMMatrixRotationY(t);
+	//m_World1 = XMMatrixRotationY(t);
 
 	XMMATRIX mScale = XMMatrixScaling(0.5f, 0.5f, 0.5f);
 	XMMATRIX mSpin = XMMatrixRotationY(-t*3.0);
 	XMMATRIX mTranslate = XMMatrixTranslation(-10.0f, 0.0f, 10.0f);
 	//XMMATRIX mOrbit = XMMatrixRotationY(-t * 2.0f);
 
-	m_World2 =  mScale*mSpin*mTranslate;
+	//m_World2 =  mScale*mSpin*mTranslate;
 }
 
 void MyRender::Close()
 {
-	_RELEASE(m_pConstantBuffer);
+	_CLOSE(m_mesh);
+	/*_RELEASE(m_pConstantBuffer);
 	_RELEASE(m_pVertexBuffer);
 	_RELEASE(m_pIndexBuffer);
 	_RELEASE(m_pVertexLayout);
 	_RELEASE(m_pVertexShader);
 	_RELEASE(m_pPixelShader);
 	_RELEASE(m_pTextureRV);
-	_RELEASE(m_pSamplerLinear);
+	_RELEASE(m_pSamplerLinear);*/
 }
