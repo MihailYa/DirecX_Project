@@ -1,7 +1,7 @@
-//#include "MyRender.h"
+#include "MyRender.h"
 #include "User.h"
-#include "Image.h"
 
+#include <Image.h>
 MyRender::MyRender()
 {
 	m_img = nullptr;
@@ -9,9 +9,7 @@ MyRender::MyRender()
 
 bool MyRender::Init(HWND hwnd)
 {
-	m_Ortho = XMMatrixOrthographicLH(640.0f, 480.0f, 0.0f, 1000.0f);
-
-	m_img = new Image();
+	m_img = new Image;
 	if (!m_img->Init(this, 640, 480, L"Texture.png", 256, 256))
 		return false;
 
@@ -21,7 +19,7 @@ bool MyRender::Init(HWND hwnd)
 bool MyRender::Draw()
 {
 	TurnZBufferOff();
-	m_img->Render(100, 100);
+	m_img->Render_Image(100, 100);
 	return true;
 }
 

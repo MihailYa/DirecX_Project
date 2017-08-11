@@ -10,9 +10,5 @@ public:
 	bool Draw();
 	void Close();
 private:
-	friend class Image;
-
 	Image *m_img;
-
-	XMMATRIX m_Ortho;
 };
