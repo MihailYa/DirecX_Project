@@ -93,9 +93,6 @@ c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathconvert.
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathvector.inl(1269): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl(518): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
 c:\program files (x86)\microsoft directx sdk (june 2010)\include\xnamathmisc.inl(519): warning C4838: conversion from 'unsigned int' to 'INT' requires a narrowing conversion
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
-  User.cpp
+c:\users\mikleya\documents\visual studio 2015\projects\github\directx\direcx_project\directx_project\directx_project\myrender.cpp(13): warning C4316: 'User': object allocated on the heap may not be aligned 16
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.exe
   DirectX_Project.vcxproj -> C:\Users\MikleYa\Documents\Visual Studio 2015\Projects\GitHub\DirectX\DirecX_Project\DirectX_Project\Debug\DirectX_Project.pdb (Full PDB)
