@@ -6,13 +6,15 @@ class MyRender : public Render
 {
 public:
 	MyRender();
-	bool Init(HWND hwnd);
+	bool Init();
 	bool Draw();
 	void Close();
 private:
-	StaticMesh *m_mesh;
+	//StaticMesh *m_mesh;
 	XMMATRIX m_view;
-	ID3D11RasterizerState* WireFrame;
-	ID3D11RasterizerState* Solid;
-	ID3D11BlendState* Transparency;
+	ID3D11Buffer* IndexBuffer;
+	ID3D11Buffer* VertBuffer;
+	ID3D11Buffer* constMatrixBuffer;
+	ID3D11Buffer* constLightBuffer;
+	Shader *shader;
 };
