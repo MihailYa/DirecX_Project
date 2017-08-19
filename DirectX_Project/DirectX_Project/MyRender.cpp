@@ -16,7 +16,7 @@ struct Light
 	{
 		ZeroMemory(this, sizeof(Light));
 	}
-	XMFLOAT3 dir;
+	/*XMFLOAT3 dir;
 	float pad1;
 
 	XMFLOAT3 pos;
@@ -24,6 +24,14 @@ struct Light
 	XMFLOAT3 att;
 	float pad2;
 
+	XMFLOAT4 ambient;
+	XMFLOAT4 diffuse;*/
+	XMFLOAT3 pos;
+	float range;
+	XMFLOAT3 dir;
+	float cone;
+	XMFLOAT3 att;
+	float pad2;
 	XMFLOAT4 ambient;
 	XMFLOAT4 diffuse;
 } light;
@@ -78,7 +86,7 @@ bool MyRender::Init()
 	shader->AddInputElementDesc("TEXCOORD", DXGI_FORMAT_R32G32_FLOAT);
 	shader->AddInputElementDesc("NORMAL", DXGI_FORMAT_R32G32B32_FLOAT);
 
-	if (!shader->CreateShader(L"pointlight.vs", L"pointlight.ps"))
+	if (!shader->CreateShader(L"spotlight.vs", L"spotlight.ps"))
 		return false;
 
 
@@ -148,6 +156,7 @@ bool MyRender::Init()
 	light.att = XMFLOAT3(0.0f, 0.2f, 0.0f);
 	light.ambient = XMFLOAT4(0.3f, 0.3f, 0.3f, 1.0f);
 	light.diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	light.cone = 10.0f;
 
 	return true;
 }
@@ -161,27 +170,16 @@ bool MyRender::Draw()
 	DWORD dwTimeCur = GetTickCount();
 	if (dwTimeStart == 0)
 		dwTimeStart = dwTimeCur;
+
 	rot = (dwTimeCur - dwTimeStart) / 1000.0f;
 
+	light.pos.x = 0.0f;
+	light.pos.y = 0.0f - 4; // Ставим "фонарь" в центр, чуть повыше уровня "земли" из 9 кубов.
+	light.pos.z = 0.0f;
 
-	XMMATRIX cube1World = XMMatrixIdentity();
-	XMVECTOR rotaxis = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	XMMATRIX Rotation = XMMatrixRotationAxis(rotaxis, rot);
-	XMMATRIX Translation = XMMatrixTranslation(0.0f, 0.0f, 4.0f);
-	cube1World = Translation * Rotation;
-
-	XMVECTOR lightVector = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	lightVector = XMVector3TransformCoord(lightVector, cube1World);
-
-	light.pos.x = XMVectorGetX(lightVector);
-	light.pos.y = XMVectorGetY(lightVector);
-	light.pos.z = XMVectorGetZ(lightVector);
-
-	XMMATRIX cube2World = XMMatrixIdentity();
-	Rotation = XMMatrixRotationAxis(rotaxis, -rot);
-	XMMATRIX Scale = XMMatrixScaling(1.3f, 1.3f, 1.3f);
-	cube2World = Rotation * Scale;
-
+	light.dir.x = 0.0f - light.pos.x;
+	light.dir.y = 0.0f - light.pos.y;
+	light.dir.z = 0.0f - light.pos.z;
 
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
@@ -194,18 +192,90 @@ bool MyRender::Draw()
 	m_pImmediateContext->UpdateSubresource(constLightBuffer, 0, NULL, &cblgh, 0, 0);
 	m_pImmediateContext->PSSetConstantBuffers(0, 1, &constLightBuffer);
 
+	/*             Пол из 4 кубов:
+	cube1World   cube4World   cube7World
+	cube2World   cube5World   cube8World
+	cube3World   cube6World   cube9World
+
+	Поменяйте параматры XMMatrixTranslation, посмотрите результат.
+	*/
+
+	XMMATRIX cube1World = XMMatrixTranslation(-2.0f, 0.0f, 2.0f);
 	XMMATRIX WVP = cube1World * m_view * m_Projection;
 	cbMatrixData cbMat;
 	cbMat.World = XMMatrixTranspose(cube1World);
 	cbMat.WVP = XMMatrixTranspose(WVP);
 	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
-
 	shader->Draw();
 	m_pImmediateContext->DrawIndexed(36, 0, 0);
 
+	XMMATRIX cube2World = XMMatrixTranslation(-2.0f, 0.0f, 0.0f);
 	WVP = cube2World * m_view * m_Projection;
 	cbMat.World = XMMatrixTranspose(cube2World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube3World = XMMatrixTranslation(-2.0f, 0.0f, -2.0f);
+	WVP = cube3World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube3World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube4World = XMMatrixTranslation(0.0f, 0.0f, 2.0f);
+	WVP = cube4World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube4World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube5World = XMMatrixTranslation(0.0f, 0.0f, 0.0f);
+	WVP = cube5World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube5World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube6World = XMMatrixTranslation(0.0f, 0.0f, -2.0f);
+	WVP = cube6World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube6World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube7World = XMMatrixTranslation(2.0f, 0.0f, 2.0f);
+	WVP = cube7World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube7World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube8World = XMMatrixTranslation(2.0f, 0.0f, 0.0f);
+	WVP = cube8World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube8World);
+	cbMat.WVP = XMMatrixTranspose(WVP);
+	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
+	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
+	shader->Draw();
+	m_pImmediateContext->DrawIndexed(36, 0, 0);
+
+	XMMATRIX cube9World = XMMatrixTranslation(2.0f, 0.0f, -2.0f);
+	WVP = cube9World * m_view * m_Projection;
+	cbMat.World = XMMatrixTranspose(cube9World);
 	cbMat.WVP = XMMatrixTranspose(WVP);
 	m_pImmediateContext->UpdateSubresource(constMatrixBuffer, 0, NULL, &cbMat, 0, 0);
 	m_pImmediateContext->VSSetConstantBuffers(0, 1, &constMatrixBuffer);
