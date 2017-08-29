@@ -1,7 +1,5 @@
-Лог создан: 08/19/17 11:28:05.
+Лог создан: 08/23/17 13:00:14.
 ---------------------------------------
 
-11:28:05::105: *DEBUG: InputMgr init
-11:28:05::106: *DEBUG: Window Create
-11:28:26::20696: *DEBUG: Window Close
-11:28:26::20699: *DEBUG: Window Close
+13:00:14::156: *DEBUG: InputMgr init
+13:00:14::157: *DEBUG: Window Create

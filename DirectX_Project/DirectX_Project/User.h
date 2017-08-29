@@ -10,6 +10,7 @@ public:
 
 	static User* Get() { return m_this; }
 	XMVECTOR GetTarget() { return m_Target; }
+	XMFLOAT4 GetPos() { return XMFLOAT4(XMVectorGetByIndex(m_Position, 0), XMVectorGetByIndex(m_Position, 1), XMVectorGetByIndex(m_Position, 2), 1.0f); }
 
 	// движение мыши
 	bool MouseMove(const MouseEvent &arg);
