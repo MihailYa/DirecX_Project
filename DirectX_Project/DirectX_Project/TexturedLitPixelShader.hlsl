@@ -5,8 +5,8 @@
 #define POINT_LIGHT 1
 #define SPOT_LIGHT 2
 
-Texture2D Texture;
-sampler Sampler;
+Texture2D Texture : register(t0);
+sampler Sampler : register(s0);
 
 struct _Material
 {
@@ -24,7 +24,7 @@ struct _Material
     //----------------------------------- (16 byte boundary)
 };  // Total:               // 80 bytes ( 5 * 16 )
 
-cbuffer MaterialProperties
+cbuffer MaterialProperties : register(b0)
 {
     _Material Material;
 };
@@ -48,8 +48,10 @@ struct Light
     //----------------------------------- (16 byte boundary)
 };  // Total:                           // 80 bytes (5 * 16 byte boundary)
 
-cbuffer LightProperties
+cbuffer LightProperties : register(b1)
 {
+    float4 EyePosition;                 // 16 bytes
+    //----------------------------------- (16 byte boundary)
     float4 GlobalAmbient;               // 16 bytes
     //----------------------------------- (16 byte boundary)
     Light Lights[MAX_LIGHTS];           // 80 * 8 = 640 bytes
@@ -138,14 +140,14 @@ LightingResult DoSpotLight( Light light, float3 V, float4 P, float3 N )
     return result;
 }
 
-LightingResult ComputeLighting( float4 P, float3 N, float4 EyePosition)
+LightingResult ComputeLighting( float4 P, float3 N )
 {
     float3 V = normalize( EyePosition - P ).xyz;
 
     LightingResult totalResult = { {0, 0, 0, 0}, {0, 0, 0, 0} };
 
     [unroll]
-    for( int i = 0; i < 1; ++i )
+    for( int i = 0; i < MAX_LIGHTS; ++i )
     {
         LightingResult result = { {0, 0, 0, 0}, {0, 0, 0, 0} };
 
@@ -179,17 +181,16 @@ LightingResult ComputeLighting( float4 P, float3 N, float4 EyePosition)
     return totalResult;
 }
 
-struct PixelInputType
+struct PixelShaderInput
 {
     float4 PositionWS   : TEXCOORD1;
     float3 NormalWS     : TEXCOORD2;
     float2 TexCoord     : TEXCOORD0;
-	float4 Position		: SV_POSITION;
 };
 
-float4 PS(PixelInputType IN ) : SV_TARGET
+float4 PS( PixelShaderInput IN ) : SV_TARGET
 {
-    LightingResult lit = ComputeLighting( IN.PositionWS, normalize(IN.NormalWS), IN.Position );
+    LightingResult lit = ComputeLighting( IN.PositionWS, normalize(IN.NormalWS) );
     
     float4 emissive = Material.Emissive;
     float4 ambient = Material.Ambient * GlobalAmbient;
@@ -205,5 +206,5 @@ float4 PS(PixelInputType IN ) : SV_TARGET
 
     float4 finalColor = ( emissive + ambient + diffuse + specular ) * texColor;
 
-    return finalColor;
+	return finalColor;
 }

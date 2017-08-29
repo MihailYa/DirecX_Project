@@ -1,7 +1,8 @@
-cbuffer cbPerObject
+cbuffer cbPerObject : register(b0)
 {
-	float4x4 WVP;
-	float4x4 World;
+	matrix WVP;
+	matrix World;
+	matrix Inverse;
 }
 
 struct AppData
@@ -13,19 +14,19 @@ struct AppData
 
 struct PixelInputType
 {
-    float4 PositionWS   : TEXCOORD1;
-    float3 NormalWS     : TEXCOORD2;
-    float2 TexCoord     : TEXCOORD0;
-    float4 Position     : SV_POSITION;
+	float4 PositionWS   : TEXCOORD1;
+	float3 NormalWS     : TEXCOORD2;
+	float2 TexCoord     : TEXCOORD0;
+	float4 Position     : SV_Position;
 };
 
 PixelInputType VS( AppData IN )
 {
 	PixelInputType OUT;
 
-    OUT.Position = mul(float4(IN.Position, 1.0f), WVP );
-    OUT.PositionWS = mul(float4(IN.Position, 1.0f), World );
-    OUT.NormalWS = mul( IN.Normal, World );
+    OUT.Position = mul(WVP, float4(IN.Position, 1.0f));
+    OUT.PositionWS = mul(World, float4(IN.Position, 1.0f));
+	OUT.NormalWS = mul((float3x3)Inverse, IN.Normal);
     OUT.TexCoord = IN.TexCoord;
 
     return OUT;

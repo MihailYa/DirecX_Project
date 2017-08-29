@@ -50,6 +50,7 @@ bool User::KeyPressed(const KeyEvent &arg)
 	switch (arg.code)
 	{
 	case KEY_ESCAPE:
+		exit(0);
 		Window::Get()->Close();
 		break;
 	case KEY_W:
@@ -91,7 +92,6 @@ void User::Refresh()
 
 	XMVECTOR forward = XMVector3Transform(XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f), Rotation);
 	m_Target = m_Position + forward;
-	
 	XMVECTOR vecUp = XMVector3Transform(XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f), Rotation);
 	
 	*m_User_View = XMMatrixLookAtLH(m_Position, m_Target, vecUp);

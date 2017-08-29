@@ -9,7 +9,7 @@ struct _Material
 		, Diffuse(1.0f, 1.0f, 1.0f, 1.0f)
 		, Specular(1.0f, 1.0f, 1.0f, 1.0f)
 		, SpecularPower(128.0f)
-		, UseTexture(false)
+		, UseTexture(true)
 	{}
 
 	XMFLOAT4   Emissive;
@@ -22,7 +22,7 @@ struct _Material
 	//----------------------------------- (16 byte boundary)
 	float               SpecularPower;
 	// Add some padding complete the 16 byte boundary.
-	int                 UseTexture;
+	bool                 UseTexture;
 	// Add some padding to complete the 16 byte boundary.
 	float                 Padding[2];
 	//----------------------------------- (16 byte boundary)
@@ -75,9 +75,11 @@ struct Light
 struct LightProperties
 {
 	LightProperties()
-		: GlobalAmbient(0.2f, 0.2f, 0.8f, 1.0f)
+		: EyePosition(5.0f, 5.0f, 5.0f, 1.0f)
+		, GlobalAmbient(0.2f, 0.2f, 0.8f, 1.0f)
 	{}
-
+	XMFLOAT4   EyePosition;
+	//----------------------------------- (16 byte boundary)
 	XMFLOAT4   GlobalAmbient;
 	//----------------------------------- (16 byte boundary)
 	Light               Lights[MAX_LIGHTS]; // 80 * 8 bytes
@@ -91,8 +93,8 @@ struct Vertex
 		float nx, float ny, float nz) :
 		Position(x, y, z), Tex0(u, v), Normal(nx, ny, nz) {}
 	XMFLOAT3 Position;
-	XMFLOAT3 Normal;
 	XMFLOAT2 Tex0;
+	XMFLOAT3 Normal;
 };
 // Per-instance data (must be 16 byte aligned)
 __declspec(align(16)) struct PlaneInstanceData

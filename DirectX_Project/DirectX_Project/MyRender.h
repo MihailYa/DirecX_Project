@@ -17,7 +17,7 @@ private:
 	ID3D11Buffer* constMatrixBuffer;
 	ID3D11Buffer* constLightBuffer;
 	ID3D11Buffer* m_material;
-	MaterialProperties pearlMaterial;
+	
 	LightProperties *light_prop;
 	Light *light;
 	Shader *shader;
